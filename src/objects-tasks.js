@@ -61,8 +61,8 @@ function mergeObjects(objects) {
  *
  */
 function removeProperties(obj, keys) {
-  const result = { ...obj }
-  for(let i = 0; i < keys.length; i += 1) {
+  const result = { ...obj };
+  for (let i = 0; i < keys.length; i += 1) {
     delete result[keys[i]];
   }
   return result;
@@ -81,10 +81,10 @@ function removeProperties(obj, keys) {
  *    compareObjects({a: 1, b: 2}, {a: 1, b: 3}) => false
  */
 function compareObjects(obj1, obj2) {
-  const res1 = Object.keys(obj1).sort();
-  const res2 = Object.keys(obj2).sort();
-  const result = JSON.stringify(res1) === JSON.stringify(res2) ? true : false;
-  return result;
+  const res1 = Object.entries(obj1).sort();
+  const res2 = Object.entries(obj2).sort();
+  if (JSON.stringify(res1) === JSON.stringify(res2)) return true;
+  return false;
 }
 
 /**
@@ -99,8 +99,8 @@ function compareObjects(obj1, obj2) {
  *    isEmptyObject({a: 1}) => false
  */
 function isEmptyObject(obj) {
-  const result = Object.keys(obj).length === 0 ? true : false;
-  return result;
+  if (Object.keys(obj).length === 0) return true;
+  return false;
 }
 
 /**
@@ -141,7 +141,7 @@ function makeWord(lettersObject) {
 
   for (let i = 0; i < arrVal.length; i += 1) {
     for (let j = 0; j < arrVal[i].length; j += 1) {
-      arrRes[arrVal[i, j]] = arrKey[i];
+      arrRes[arrVal[i][j]] = arrKey[i];
     }
   }
   const result = arrRes.join('');
@@ -164,38 +164,30 @@ function makeWord(lettersObject) {
  */
 function sellTickets(queue) {
   if (queue[0] > 25) return false;
-  let stack_25 = 0;
-  let stack_50 = 0;
+  let stackBill25 = 0;
+  let stackBill50 = 0;
 
-  for (let i = 0; i < queue.length; i++) {
+  for (let i = 0; i < queue.length; i += 1) {
     switch (queue[i]) {
       case 25:
-        stack_25 += 1;
+        stackBill25 += 1;
         break;
       case 50:
-        if (stack_25 === 0) {
-          return false;
-        } else {
-        stack_25 -= 1;
-        stack_50 += 1;
-        }
+        if (stackBill25 === 0) return false;
+        stackBill25 -= 1;
+        stackBill50 += 1;
         break;
       case 100:
-        if (stack_25 === 0) {
-          return false;
+        if (stackBill25 === 0) return false;
+        if (stackBill50 > 0) {
+          stackBill50 -= 1;
+          stackBill25 -= 1;
         } else {
-          if (stack_50 > 0) {
-            stack_50 -= 1;
-            stack_25 -= 1;
-          } else {
-            if (stack_25 < 3) {
-              return false;
-            } else {
-              stack_25 -= 3;
-            }
-          }
+          if (stackBill25 < 3) return false;
+          stackBill25 -= 3;
+        }
         break;
-      }
+      default:
     }
   }
   return true;
